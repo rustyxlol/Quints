@@ -4,7 +4,6 @@ from lcu_driver import Connector
 from bs4 import BeautifulSoup
 
 gameType = "CLASSIC"
-flag = 2
 
 champion_dict = requests.get(
     "https://ddragon.leagueoflegends.com/cdn/12.12.1/data/en_US/champion.json"
@@ -84,9 +83,13 @@ def uggParsing(champion):
 connector = Connector()
 
 
+@connector.ready
+async def connect(connection):
+    print("LCU API is ready to be used.")
+
+
 async def lobby_type(connection, event):
-    gameType = event.data["gameData"]["queue"]["gameMode"]
-    return gameType
+    return event.data["gameData"]["queue"]["gameMode"]
 
 
 async def get_details(connection, champion):
@@ -103,6 +106,7 @@ async def get_details(connection, champion):
     }
     await connection.request("post", "/lol-perks/v1/pages", data=newRune)
     webbrowser.open(URL)
+
     print(f"{champion} - RUNES HAVE BEEN UPDATED")
 
 
@@ -117,8 +121,6 @@ async def get_details(connection, champion):
 async def get_gametype(connection, event):
     if event.data["phase"] == "ChampSelect":
         global gameType
-        global flag
-        flag = 2
         gameType = await lobby_type(connection, event)
 
 
@@ -131,21 +133,14 @@ async def get_gametype(connection, event):
     ),
 )
 async def get_champion(connection, event):
-    if int(event.data) > 0:
-        global flag
-        flag = flag - 1
+    if event.data:
         currentChamp = await connection.request(
             "get", "/lol-champ-select/v1/current-champion"
         )
         currentChamp = await currentChamp.json()
         currentChamp = id_to_name[str(currentChamp)]
-        if flag > 0:
-            await get_details(connection, currentChamp)
 
-
-@connector.ready
-async def connect(connection):
-    print("LCU API is ready to be used.")
+        await get_details(connection, currentChamp)
 
 
 connector.start()
