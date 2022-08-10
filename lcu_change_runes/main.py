@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 gameType = "CLASSIC"
 
 champion_dict = requests.get(
-    "https://ddragon.leagueoflegends.com/cdn/12.12.1/data/en_US/champion.json"
+    "https://ddragon.leagueoflegends.com/cdn/12.14.1/data/en_US/champion.json"
 ).json()
 id_to_name = {data["key"]: data["name"] for _, data in champion_dict["data"].items()}
 
