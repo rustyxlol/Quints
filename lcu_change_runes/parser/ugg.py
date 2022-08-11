@@ -3,9 +3,10 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
 from constants import CHROME_DRIVER_PATH
+from runes_reforged import RunesReforged
 
 
-class SDriver:
+class SParser:
     def __init__(self, url):
         self.url = url
 
@@ -15,8 +16,8 @@ class SDriver:
             executable_path=CHROME_DRIVER_PATH,
             options=self.options,
         )
-        self.content = None
-        self.soup = None
+
+        self.active_runes = []
 
     def get_url_content(self):
         self.driver.get(self.url)
@@ -30,28 +31,36 @@ class SDriver:
             class_="rune-trees-container-2 media-query media-query_MOBILE_LARGE__DESKTOP_LARGE",
         )
 
-        full_primary = rune_container.find("div", class_="rune-tree_v2 primary-tree")
-        full_secondary = rune_container.find("div", class_="secondary-tree")
-        full_shards = rune_container.find(
-            "div", class_="rune-tree_v2 stat-shards-container_v2"
-        )
+        rune_main_classes = [
+            "rune-tree_v2 primary-tree",
+            "secondary-tree",
+            "rune-tree_v2 stat-shards-container_v2",
+        ]
+        rune_sub_classes = [
+            ["perk keystone perk-active", "perk perk-active"],
+            "perk perk-active",
+            "shard shard-active",
+        ]
 
-        active_primary = full_primary.find_all(
-            "div", class_=["perk keystone perk-active", "perk perk-active"]
-        )
-        active_secondary = full_secondary.find_all("div", class_="perk perk-active")
-        active_shards = full_shards.find_all("div", class_="shard shard-active")
+        for (rune_class, rune_sub_class) in zip(rune_main_classes, rune_sub_classes):
+            self.active_runes.extend(
+                (self.get_active_runes(rune_container, rune_class, rune_sub_class))
+            )
 
-        for rune in active_primary:
-            print(rune.img["alt"])
-
-        for rune in active_secondary:
-            print(rune.img["alt"])
-
-        for rune in active_shards:
-            print(rune.img["alt"])
+        self.map_runes()
 
         self.stop_driver()
+
+    def get_active_runes(self, rune_container, rune_class, rune_sub_class):
+        active_runes = []
+
+        soup_all_runes = rune_container.find("div", class_=rune_class)
+        soup_active_runes = soup_all_runes.find_all("div", class_=rune_sub_class)
+
+        for rune in soup_active_runes:
+            active_runes.append(rune.img["alt"])
+
+        return active_runes
 
     def stop_driver(self):
         self.driver.quit()
@@ -59,5 +68,8 @@ class SDriver:
 
 url = "https://u.gg/lol/champions/nunu/build"
 
-ugg = SDriver(url)
+Runes = RunesReforged()
+Runes.parse_runes()
+
+ugg = SParser(url)
 ugg.parse_url_content()
