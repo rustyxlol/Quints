@@ -16,7 +16,7 @@ class SParser:
             executable_path=CHROME_DRIVER_PATH,
             options=self.options,
         )
-
+        self.runes = {}
         self.active_runes = []
 
     def get_url_content(self):
@@ -47,7 +47,7 @@ class SParser:
                 (self.get_active_runes(rune_container, rune_class, rune_sub_class))
             )
 
-        self.map_runes()
+        self.map_runes_to_id()
 
         self.stop_driver()
 
@@ -61,6 +61,13 @@ class SParser:
             active_runes.append(rune.img["alt"])
 
         return active_runes
+
+    def map_runes_to_id(self):
+        for rune in self.active_runes:
+            for rune_id, rune_name in Runes.runes.items():
+                if rune_name in rune:
+                    self.runes[rune_id] = rune_name
+        print(self.runes)
 
     def stop_driver(self):
         self.driver.quit()
