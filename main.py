@@ -1,7 +1,8 @@
-import requests
 import webbrowser
-from lcu_driver import Connector
+
+import requests
 from bs4 import BeautifulSoup
+from lcu_driver import Connector
 
 gameType = "CLASSIC"
 
@@ -25,12 +26,12 @@ for i in range(5):
     runeHeading[rhead[i]["key"]] = rhead[i]["id"]
 
 subRunes = {
-    "The Adaptive Force Shard": 5008,
-    "The Attack Speed Shard": 5005,
-    "The Scaling CDR Shard": 5007,
-    "The Armor Shard": 5002,
-    "The Magic Resist Shard": 5003,
-    "The Scaling Bonus Health Shard": 5001,
+    5008: "The Adaptive Force Shard",
+    5005: "The Attack Speed Shard",
+    5007: "The Scaling CDR Shard",
+    5002: "The Armor Shard",
+    5003: "The Magic Resist Shard",
+    5001: "The Scaling Bonus Health Shard",
 }
 
 
