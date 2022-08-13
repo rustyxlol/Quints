@@ -206,19 +206,6 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*, 
 graph = ["objgraph (>=1.7.2)"]
 
 [[package]]
-name = "flake8"
-version = "5.0.4"
-description = "the modular source code checker: pep8 pyflakes and co"
-category = "dev"
-optional = false
-python-versions = ">=3.6.1"
-
-[package.dependencies]
-mccabe = ">=0.7.0,<0.8.0"
-pycodestyle = ">=2.9.0,<2.10.0"
-pyflakes = ">=2.5.0,<2.6.0"
-
-[[package]]
 name = "frozenlist"
 version = "1.3.1"
 description = "A list-like structure which implements collections.abc.MutableSequence"
@@ -275,6 +262,20 @@ python-versions = "*"
 [package.dependencies]
 aiohttp = "*"
 psutil = "*"
+
+[[package]]
+name = "lxml"
+version = "4.9.1"
+description = "Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API."
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, != 3.4.*"
+
+[package.extras]
+cssselect = ["cssselect (>=0.7)"]
+html5 = ["html5lib"]
+htmlsoup = ["beautifulsoup4"]
+source = ["Cython (>=0.29.7)"]
 
 [[package]]
 name = "mccabe"
@@ -381,28 +382,12 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
-name = "pycodestyle"
-version = "2.9.1"
-description = "Python style guide checker"
-category = "dev"
-optional = false
-python-versions = ">=3.6"
-
-[[package]]
 name = "pycparser"
 version = "2.21"
 description = "C parser in Python"
 category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-
-[[package]]
-name = "pyflakes"
-version = "2.5.0"
-description = "passive checker of Python programs"
-category = "dev"
-optional = false
-python-versions = ">=3.6"
 
 [[package]]
 name = "pylint"
@@ -547,7 +532,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "tomlkit"
-version = "0.11.3"
+version = "0.11.4"
 description = "Style preserving TOML library"
 category = "dev"
 optional = false
@@ -645,7 +630,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "0500c3339cd519e96620d23e6ffc6a6599f537bd06fd3b9f266d0887c3139528"
+content-hash = "42bcccab666d3229dbab385a68f437c09ecec3754dece9eb5f883dc4414fad72"
 
 [metadata.files]
 aiohttp = []
@@ -680,7 +665,6 @@ colorama = [
 ]
 cryptography = []
 dill = []
-flake8 = []
 frozenlist = []
 h11 = []
 idna = [
@@ -690,6 +674,7 @@ idna = [
 isort = []
 lazy-object-proxy = []
 lcu-driver = []
+lxml = []
 mccabe = []
 more-itertools = []
 multidict = []
@@ -713,9 +698,7 @@ py = [
     {file = "py-1.11.0-py2.py3-none-any.whl", hash = "sha256:607c53218732647dff4acdfcd50cb62615cedf612e72d1724fb1a0cc6405b378"},
     {file = "py-1.11.0.tar.gz", hash = "sha256:51c75c4126074b472f746a24399ad32f6053d1b34b68d2fa41e558e6f4a98719"},
 ]
-pycodestyle = []
 pycparser = []
-pyflakes = []
 pylint = []
 pyopenssl = []
 pyparsing = [
