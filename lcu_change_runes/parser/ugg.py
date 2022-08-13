@@ -1,30 +1,49 @@
+"""Scraper for UGG"""
+
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from lcu_change_runes.parser.constants import CHROME_DRIVER_PATH
+from lcu_change_runes.parser.runes_reforged import RunesReforged
 
-from constants import CHROME_DRIVER_PATH
-from runes_reforged import RunesReforged
 
-
-class SParser:
+class UGGParser:
     """Parser for UGG"""
 
-    def __init__(self, url):
-        self.url = url
+    def __init__(self):
 
         self.options = Options()
         self.options.headless = True
+        self.options.add_experimental_option("detach", True)
+        self.options.add_experimental_option("excludeSwitches", ["enable-logging"])
         self.driver = webdriver.Chrome(
-            executable_path=CHROME_DRIVER_PATH,
+            service=Service(CHROME_DRIVER_PATH),
             options=self.options,
         )
 
-    def get_url_content(self):
-        self.driver.get(self.url)
-        return self.driver.page_source.encode("utf-8").strip()
+    def get_url_content(self, url):
+        """Returns page source from URL
 
-    def get_active_runes(self):
-        soup = BeautifulSoup(self.get_url_content(), "html.parser")
+        Args:
+            url: URL of target page
+
+        Returns:
+            Page source
+        """
+        self.driver.get(url)
+        return self.driver.page_source
+
+    def get_active_runes(self, url):
+        """Returns active runes from given URL
+
+        Args:
+            url: URL of target page
+
+        Returns:
+            Dictionary of active runes with id and rune name pair
+        """
+        soup = BeautifulSoup(self.get_url_content(url), "html.parser")
         active_runes = []
 
         rune_container = soup.find(
@@ -76,11 +95,12 @@ class SParser:
 
 
 if __name__ == "__main__":
-    url = "https://u.gg/lol/champions/nunu/build"
+    _URL = "https://u.gg/lol/champions/nunu/build"
 
     Runes = RunesReforged()
     Runes.parse_all_runes()
 
-    ugg = SParser(url)
-    active_runes = Runes.map_to_id(ugg.get_active_runes())
-    ugg.stop_driver()
+    _ugg = UGGParser()
+    _active_runes = Runes.map_to_id(_ugg.get_active_runes(_URL))
+    print(_active_runes)
+    _ugg.stop_driver()
