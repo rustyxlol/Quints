@@ -1,15 +1,16 @@
+from lcu_driver import Connector
+
 from lcu_change_runes.handler.lcu_utils import summoner_greeting
 from lcu_change_runes.parser.champions import Champions
 from lcu_change_runes.parser.runes_reforged import RunesReforged
 from lcu_change_runes.parser.ugg import UGGParser
-from lcu_driver import Connector
 
 RunesRef = RunesReforged()
-RunesRef.parse_all_runes()
+RunesRef.cache_rune_data()
 
 champions = Champions()
-champions.initialize_champions_from_source()
-champions.parse_all_champions()
+champions.load_champ_data_source()
+champions.cache_champ_data()
 
 parse_ugg = UGGParser()
 
@@ -62,7 +63,7 @@ async def current_game_type(connection, event):
 )
 async def locked_champion(connection, event):
     champion_key = event.data
-    current_champion = champions.get_champion_name_by_key(champion_key)
+    current_champion = champions.get_champ_name_by_key(champion_key)
     if current_champion is not None:
         if current_champion != connection.locals["current_champion_name"]:
             connection.locals["current_champion_key"] = champion_key
@@ -125,7 +126,7 @@ async def get_ugg_runes(connection):
     else:
         ugg_url += "/" + connection.locals["current_champion_name"] + "/build"
 
-    active_runes = RunesRef.map_to_id(parse_ugg.get_active_runes(ugg_url))
+    active_runes = RunesRef.map_rune_name_to_id(parse_ugg.get_active_runes(ugg_url))
 
     return active_runes
 

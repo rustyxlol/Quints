@@ -18,6 +18,8 @@ pytest = "^5.2"
 black = {version = "^22.6.0", allow-prereleases = true}
 pylint = "^2.14.5"
 
+[tool.isort]
+profile = "black" 
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

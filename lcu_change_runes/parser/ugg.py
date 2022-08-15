@@ -1,12 +1,13 @@
 """Scraper for UGG"""
 
 from bs4 import BeautifulSoup
-from lcu_change_runes.parser.champions import Champions
-from lcu_change_runes.parser.constants import CHROME_DRIVER_PATH
-from lcu_change_runes.parser.runes_reforged import RunesReforged
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
+
+from lcu_change_runes.parser.champions import Champions
+from lcu_change_runes.parser.constants import CHROME_DRIVER_PATH
+from lcu_change_runes.parser.runes_reforged import RunesReforged
 
 
 class UGGParser:
@@ -114,10 +115,10 @@ def generate_url(champion_name, game_mode):
 
 if __name__ == "__main__":
     Runes = RunesReforged()
-    Runes.parse_all_runes()
+    Runes.cache_rune_data()
 
     champions = Champions()
-    champions.parse_all_champions()
+    champions.cache_champ_data()
 
     _ugg = UGGParser()
 
@@ -125,7 +126,7 @@ if __name__ == "__main__":
         for champion in list(champions.champions_cache.values())[:1]:
             current_url = generate_url(champion, game_mode)
             print("Working on", current_url)
-            active_runes = Runes.map_to_id(_ugg.get_active_runes(current_url))
+            active_runes = Runes.map_rune_name_to_id(_ugg.get_active_runes(current_url))
             print("Generated runes for", champion)
             print(active_runes)
             print(_ugg.get_rune_paths())
