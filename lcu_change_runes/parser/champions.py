@@ -18,7 +18,7 @@ class Champions:
     def parse_all_champions(self):
         """Converts champions data from data dragon into key-value pairs of champion key and name"""
         for _, champion in self.champions_source["data"].items():
-            self.champions_cache[int(champion["key"])] = champion["name"]
+            self.champions_cache[int(champion["key"])] = champion["id"]
 
     def get_champion_name_by_key(self, key):
         """Gets champion name by provided champion key(integer)

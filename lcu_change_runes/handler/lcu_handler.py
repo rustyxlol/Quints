@@ -4,8 +4,8 @@ from lcu_change_runes.parser.runes_reforged import RunesReforged
 from lcu_change_runes.parser.ugg import UGGParser
 from lcu_driver import Connector
 
-runes = RunesReforged()
-runes.parse_all_runes()
+RunesRef = RunesReforged()
+RunesRef.parse_all_runes()
 
 champions = Champions()
 champions.initialize_champions_from_source()
@@ -34,6 +34,7 @@ async def connect(connection):
     else:
         summoner_details = await req_summoner_details.json()
         summoner_greeting(summoner_details)
+    print("\n")
 
 
 # Obtain game type first(classic/aram)
@@ -47,7 +48,7 @@ async def entered_champ_select(connection, event):
 
 async def current_game_type(connection, event):
     connection.locals["game_mode"] = event.data["gameData"]["queue"]["gameMode"]
-    print(f"Joined {connection.locals['game_mode']} game type")
+    # print(f"Joined {connection.locals['game_mode']} game type")
 
 
 # Obtain currently selected champion
@@ -66,13 +67,15 @@ async def locked_champion(connection, event):
         if current_champion != connection.locals["current_champion_name"]:
             connection.locals["current_champion_key"] = champion_key
             connection.locals["current_champion_name"] = current_champion
-            print("Locked in:", current_champion)
-            await get_ugg_runes(connection)
+            print("Locked in:", current_champion, "\n")
+            await change_runes(connection)
 
 
 async def change_runes(connection):
     current_rune_page_id = await get_current_rune_page(connection)
     await delete_current_rune_page(connection, current_rune_page_id)
+    ugg_runes = await get_ugg_runes(connection)
+    await create_new_rune_page(connection, ugg_runes)
 
 
 # Change runes
@@ -88,24 +91,43 @@ async def get_current_rune_page(connection):
     return current_rune_page_id
 
 
+# {8437: 'Grasp of the Undying',
+# 8401: 'Shield Bash', 8444: 'Second Wind', # 8242: 'Unflinching',
+# 9111: # 'Triumph', 9104: 'Legend: Alacrity',
+# 5005: 'The # Attack Speed Shard', 5003: 'The Magic Resist Shard', 5001: 'The Scaling Bonus Health Shard'}
 async def delete_current_rune_page(connection, id):
-    await connection.request("delete", "/lol-perks/v1/pages/" + id)
+    print("Deleting current rune page...")
+    await connection.request("delete", "/lol-perks/v1/pages/" + str(id))
 
 
-async def create_new_rune_page(connection):
-    pass
+async def create_new_rune_page(connection, runes):
+    print("Creating new rune page...\n")
+    rune_sequence_ids = [rune[0] for rune in runes]
+    primary_keystone = rune_sequence_ids[0]
+    secondary_keystone = rune_sequence_ids[1]
+    active_rune_ids = rune_sequence_ids[2:]
+
+    new_rune_body = {
+        "name": connection.locals["current_champion_name"] + " Runes",
+        "primaryStyleId": primary_keystone,
+        "subStyleId": secondary_keystone,
+        "selectedPerkIds": active_rune_ids,
+    }
+    await connection.request("post", "/lol-perks/v1/pages", data=new_rune_body)
+    print("Runes successfully updated!\n")
 
 
 async def get_ugg_runes(connection):
+    print("Obtaining runes from u.gg...")
     ugg_url = "https://u.gg/lol/champions"
     if connection.locals["game_mode"] == "ARAM":
         ugg_url += "/aram/" + connection.locals["current_champion_name"] + "-aram"
     else:
         ugg_url += "/" + connection.locals["current_champion_name"] + "/build"
 
-    active_runes = runes.map_to_id(parse_ugg.get_active_runes(ugg_url))
+    active_runes = RunesRef.map_to_id(parse_ugg.get_active_runes(ugg_url))
 
-    print(active_runes)
+    return active_runes
 
 
 # Fired when League Client is closed (or disconnected from websocket)
