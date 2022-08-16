@@ -11,6 +11,7 @@ class Champions:
         self.champions_source = {}
         self.champions_cache = {}
         self.load_champ_data_source()
+        self.cache_champ_data()
 
     def load_champ_data_source(self):
         """Gets all champions from data dragon CDN"""

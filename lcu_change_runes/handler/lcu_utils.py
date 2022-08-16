@@ -3,11 +3,8 @@ from lcu_change_runes.parser.runes_reforged import RunesReforged
 from lcu_change_runes.parser.ugg import UGGParser
 
 RunesRef = RunesReforged()
-RunesRef.cache_rune_data()
 
 champions = Champions()
-champions.load_champ_data_source()
-champions.cache_champ_data()
 
 parse_ugg = UGGParser()
 
@@ -76,4 +73,3 @@ async def get_ugg_runes(connection):
 
 async def current_game_type(connection, event):
     connection.locals["game_mode"] = event.data["gameData"]["queue"]["gameMode"]
-    # print(f"Joined {connection.locals['game_mode']} game type")

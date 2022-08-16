@@ -11,6 +11,7 @@ class RunesReforged:
         self.runes_source = {}
         self.runes_cache = {}
         self.load_rune_data_source()
+        self.cache_rune_data()
 
     def load_rune_data_source(self):
         """Gets all runes from data dragon CDN
@@ -51,5 +52,4 @@ class RunesReforged:
 
 if __name__ == "__main__":
     _runes = RunesReforged()
-    _runes.cache_rune_data()
     print(_runes.runes_cache)
