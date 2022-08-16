@@ -12,7 +12,6 @@ connector = Connector()
 
 @connector.ready
 async def connect(connection):
-    """Estbalish connection with league client"""
     connection.locals["game_mode"] = "CLASSIC"
     connection.locals["current_champion_name"] = None
     connection.locals["current_champion_key"] = 1

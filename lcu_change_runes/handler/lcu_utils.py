@@ -36,9 +36,9 @@ async def get_current_rune_page(connection):
         print("No rune page found!")
 
 
-async def delete_current_rune_page(connection, id):
+async def delete_current_rune_page(connection, rune_page_id):
     print("Deleting current rune page...")
-    await connection.request("delete", "/lol-perks/v1/pages/" + str(id))
+    await connection.request("delete", "/lol-perks/v1/pages/" + str(rune_page_id))
 
 
 async def create_new_rune_page(connection, runes):
