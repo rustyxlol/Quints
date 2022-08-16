@@ -9,7 +9,7 @@ from lcu_change_runes.handler.lcu_utils import (
 
 connector = Connector()
 
-# Fired when LCU API is ready to be used
+
 @connector.ready
 async def connect(connection):
     """Estbalish connection with league client"""
@@ -31,16 +31,12 @@ async def connect(connection):
     print("\n")
 
 
-# Obtain game type first(classic/aram)
 @connector.ws.register("/lol-gameflow/v1/session", event_types=("UPDATE",))
 async def entered_champ_select(connection, event):
     if event.data["phase"] == "ChampSelect":
-        # if event.data["gameData"]["gameId"] != connection.locals["last_game_id"]:
-        # connection.locals["last_game_id"] = event.data["gameData"]["gameId"]
         await current_game_type(connection, event)
 
 
-# Obtain currently selected champion
 @connector.ws.register(
     "/lol-champ-select/v1/current-champion",
     event_types=(
