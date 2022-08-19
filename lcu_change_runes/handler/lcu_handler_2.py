@@ -1,5 +1,8 @@
 from lcu_change_runes.game_data.all_game_data import get_all_champions
-from lcu_change_runes.handler.lcu_apis import LCU_DELETE, LCU_GET
+from lcu_change_runes.handler.lcu_apis import LCU_DELETE, LCU_GET, LCU_POST
+from lcu_change_runes.parser.ugg import UGGParser, generate_runes
+
+_ugg = UGGParser()
 
 
 async def get_summoner_data(connection):
@@ -46,12 +49,10 @@ async def is_champ_select_phase(_, event):
 async def update_current_champion(connection, event):
     current_champion = await get_current_champion(connection, event)
 
-    if not current_champion:
-        return
-
-    if connection.locals["champion"] != current_champion:
-        connection.locals["champion"] = current_champion
-        print("Current Champion:", current_champion.name)
+    if current_champion:
+        if connection.locals["champion"] != current_champion:
+            connection.locals["champion"] = current_champion
+            print("Current Champion:", current_champion.name)
 
 
 async def get_current_champion(_, event):
@@ -69,8 +70,18 @@ async def update_rune_page(connection):
 
 async def delete_current_rune_page(connection):
     status, current_page = await LCU_GET(connection, "/lol-perks/v1/currentpage")
-    await LCU_DELETE(connection, "/lol-perks/v1/pages/" + current_page["id"])
+    await LCU_DELETE(connection, "/lol-perks/v1/pages/" + str(current_page["id"]))
 
 
 async def create_new_rune_page(connection):
-    ...
+    ugg_runes = generate_runes(
+        _ugg, connection.locals["champion"], connection.locals["game_mode"]
+    )
+    runes = ugg_runes.runes
+    payload = {
+        "name": connection.locals["champion"].name + " Runes",
+        "primaryStyleId": runes[0].id,
+        "subStyleId": runes[1].id,
+        "selectedPerkIds": ugg_runes.all_rune_ids()[2:],
+    }
+    await LCU_POST(connection, "/lol-perks/v1/pages", payload)

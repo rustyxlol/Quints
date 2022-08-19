@@ -7,7 +7,6 @@ from selenium.webdriver.chrome.service import Service
 
 from lcu_change_runes.game_data.all_game_data import get_all_runes
 from lcu_change_runes.game_data.structs import Runes
-from lcu_change_runes.parser.champions import Champions
 from lcu_change_runes.parser.constants import CHROME_DRIVER_PATH
 
 
@@ -27,26 +26,10 @@ class UGGParser:
         self.rune_container = None
 
     def get_url_content(self, url):
-        """Returns page source from URL
-
-        Args:
-            url: URL of target page
-
-        Returns:
-            Page source
-        """
         self.driver.get(url)
         return self.driver.page_source
 
     def get_active_runes(self, url):
-        """Returns active runes from given URL
-
-        Args:
-            url: URL of target page
-
-        Returns:
-            Dictionary of active runes with id and rune name pair
-        """
         soup = BeautifulSoup(self.get_url_content(url), "html.parser")
         active_runes = []
 
@@ -114,7 +97,7 @@ def generate_url(champion_name, game_mode):
     return base_url
 
 
-if __name__ == "__main__":
+def generate_runes(_ugg, champion, game_mode):
     all_runes = get_all_runes()
     new_runes = Runes()
 
@@ -126,23 +109,17 @@ if __name__ == "__main__":
         "The Magic Resist Shard": "MagicRes",
         "The Scaling Bonus Health Shard": "HealthScaling",
     }
-    champions = Champions()
-    champions.cache_champ_data()
 
-    _ugg = UGGParser()
+    current_url = generate_url(champion.name, game_mode)
+    print("Working on", current_url)
+    active_runes = _ugg.get_active_runes(current_url)
+    print("Generated runes for", champion.name)
+    for rune in active_runes[:-3]:
+        new_rune = rune.replace("The", "")
+        new_rune = new_rune.replace("Keystone", "")
+        new_rune = new_rune.replace("Rune", "")
+        new_runes.add(all_runes.from_name(new_rune))
+    for rune in active_runes[-3:]:
+        new_runes.add(all_runes.from_name(dumb_ugg_shard_dict[rune]))
 
-    for game_mode in ("CLASSIC", "ARAM"):
-        for champion in list(champions.champions_cache.values())[:1]:
-            current_url = generate_url(champion, game_mode)
-            print("Working on", current_url)
-            active_runes = _ugg.get_active_runes(current_url)
-            print("Generated runes for", champion)
-            for rune in active_runes[:-3]:
-                new_rune = rune.replace("The", "")
-                new_rune = new_rune.replace("Keystone", "")
-                new_rune = new_rune.replace("Rune", "")
-                new_runes.add(all_runes.from_name(new_rune))
-            for rune in active_runes[-3:]:
-                new_runes.add(all_runes.from_name(dumb_ugg_shard_dict[rune]))
-    print(new_runes)
-    _ugg.stop_driver()
+    return new_runes
