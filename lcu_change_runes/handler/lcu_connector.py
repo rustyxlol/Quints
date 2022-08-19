@@ -1,6 +1,6 @@
 from lcu_driver import Connector
 
-from lcu_change_runes.handler.lcu_handler_2 import (
+from lcu_change_runes.handler.lcu_handler import (
     get_summoner_data,
     initialize_variables,
     update_current_champion_and_runes,
