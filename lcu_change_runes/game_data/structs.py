@@ -21,7 +21,6 @@ class Champions:
             if champion.id == champ_id:
                 return champion
         return None
-        # return [champion for champion in self.champions if champion.id == champ_id]
 
     def from_name(self, name):
         for champion in self.champions:
@@ -50,14 +49,16 @@ class Runes:
         self.runes.append(rune)
 
     def from_id(self, rune_id):
-        return [rune for rune in self.runes if rune.id == rune_id]
+        for rune in self.runes:
+            if rune.id == rune_id:
+                return rune
+        return None
 
     def from_name(self, name):
-        return [
-            rune
-            for rune in self.runes
-            if rune.name.lower() == remove_spaces(name.lower())
-        ]
+        for rune in self.runes:
+            if rune.name.lower() == remove_spaces(name.lower()):
+                return rune
+        return None
 
     def all_rune_ids(self):
         return [rune.id for rune in self.runes]

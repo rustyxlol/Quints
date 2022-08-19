@@ -5,9 +5,10 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 
+from lcu_change_runes.game_data.all_game_data import get_all_runes
+from lcu_change_runes.game_data.structs import Runes
 from lcu_change_runes.parser.champions import Champions
 from lcu_change_runes.parser.constants import CHROME_DRIVER_PATH
-from lcu_change_runes.parser.runes_reforged import RunesReforged
 
 
 class UGGParser:
@@ -114,9 +115,17 @@ def generate_url(champion_name, game_mode):
 
 
 if __name__ == "__main__":
-    Runes = RunesReforged()
-    Runes.cache_rune_data()
+    all_runes = get_all_runes()
+    new_runes = Runes()
 
+    dumb_ugg_shard_dict = {
+        "The Adaptive Force Shard": "Adaptive",
+        "The Attack Speed Shard": "AttackSpeed",
+        "The Scaling CDR Shard": "CDRScaling",
+        "The Armor Shard": "Armor",
+        "The Magic Resist Shard": "MagicRes",
+        "The Scaling Bonus Health Shard": "HealthScaling",
+    }
     champions = Champions()
     champions.cache_champ_data()
 
@@ -126,10 +135,14 @@ if __name__ == "__main__":
         for champion in list(champions.champions_cache.values())[:1]:
             current_url = generate_url(champion, game_mode)
             print("Working on", current_url)
-            active_runes = Runes.map_rune_name_to_id(_ugg.get_active_runes(current_url))
+            active_runes = _ugg.get_active_runes(current_url)
             print("Generated runes for", champion)
-            print(active_runes)
-            print(_ugg.get_rune_paths())
-
-    print(dict(active_runes))
+            for rune in active_runes[:-3]:
+                new_rune = rune.replace("The", "")
+                new_rune = new_rune.replace("Keystone", "")
+                new_rune = new_rune.replace("Rune", "")
+                new_runes.add(all_runes.from_name(new_rune))
+            for rune in active_runes[-3:]:
+                new_runes.add(all_runes.from_name(dumb_ugg_shard_dict[rune]))
+    print(new_runes)
     _ugg.stop_driver()

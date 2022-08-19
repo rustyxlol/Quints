@@ -4,7 +4,8 @@ disable=
       missing-function-docstring,
       missing-class-docstring,
       invalid-name,
-      no-member
+      no-member,
+      line-too-long,
 
 
 # Analyse import fallback blocks. This can be used to support both Python 2 and
