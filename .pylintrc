@@ -1,7 +1,10 @@
 [MAIN]
 disable=
       missing-module-docstring,
-      missing-function-docstring
+      missing-function-docstring,
+      missing-class-docstring,
+      invalid-name,
+      no-member
 
 
 # Analyse import fallback blocks. This can be used to support both Python 2 and
