@@ -46,7 +46,7 @@ class RunesReforged:
         for rune in raw_runes:
             for rune_id, rune_name in self.runes_cache.items():
                 if rune_name in rune:
-                    mapped_runes.append((rune_id, rune_name))
+                    mapped_runes.append((rune_name, rune_id))
         return mapped_runes
 
 

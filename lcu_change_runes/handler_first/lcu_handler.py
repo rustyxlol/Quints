@@ -1,6 +1,6 @@
 from lcu_driver import Connector
 
-from lcu_change_runes.handler.lcu_utils import (
+from lcu_change_runes.handler_first.lcu_utils import (
     champions,
     change_runes,
     current_game_type,

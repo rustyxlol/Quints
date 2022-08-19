@@ -131,4 +131,5 @@ if __name__ == "__main__":
             print(active_runes)
             print(_ugg.get_rune_paths())
 
+    print(dict(active_runes))
     _ugg.stop_driver()
