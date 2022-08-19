@@ -92,17 +92,17 @@ class TestRunes(unittest.TestCase):
         )
 
     def test_from_id(self):
-        self.assertEqual(self.runes.from_id(1), [self.triumph])
-        self.assertEqual(self.runes.from_id(2), [self.cdg])
+        self.assertEqual(self.runes.from_id(1), self.triumph)
+        self.assertEqual(self.runes.from_id(2), self.cdg)
 
-        self.assertEqual(self.runes.from_id(20), [])
+        self.assertEqual(self.runes.from_id(20), None)
 
     def test_from_name(self):
-        self.assertEqual(self.runes.from_name("Triumph"), [self.triumph])
-        self.assertEqual(self.runes.from_name("Triumph"), [self.triumph])
-        self.assertEqual(self.runes.from_name("CoupDeGrace"), [self.cdg])
+        self.assertEqual(self.runes.from_name("Triumph"), self.triumph)
+        self.assertEqual(self.runes.from_name("Triumph"), self.triumph)
+        self.assertEqual(self.runes.from_name("CoupDeGrace"), self.cdg)
 
-        self.assertEqual(self.runes.from_name("Random Rune"), [])
+        self.assertEqual(self.runes.from_name("Random Rune"), None)
 
     def test_all_rune_ids(self):
         self.assertEqual(self.runes.all_rune_ids(), [1, 2])
@@ -113,7 +113,7 @@ class TestRunes(unittest.TestCase):
     def test_mutability(self):
         self.runes.add(Rune(3, "Conquerer"))
 
-        self.assertEqual(self.runes.from_id(3), [Rune(3, "Conquerer")])
+        self.assertEqual(self.runes.from_id(3), Rune(3, "Conquerer"))
 
 
 if __name__ == "__main__":

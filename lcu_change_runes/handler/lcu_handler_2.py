@@ -1,4 +1,5 @@
-from lcu_change_runes.handler.lcu_apis import LCU_GET
+from lcu_change_runes.game_data.all_game_data import get_all_champions
+from lcu_change_runes.handler.lcu_apis import LCU_DELETE, LCU_GET
 
 
 async def get_summoner_data(connection):
@@ -53,6 +54,23 @@ async def update_current_champion(connection, event):
         print("Current Champion:", current_champion.name)
 
 
-async def get_current_champion(connection, event):
-    champions = Champions([Champion(1, "Annie")])
+async def get_current_champion(_, event):
+    champions = get_all_champions()
     return champions.from_id(event.data)
+
+
+#################################################################
+#                         RUNES                                 #
+#################################################################
+async def update_rune_page(connection):
+    await delete_current_rune_page(connection)
+    await create_new_rune_page(connection)
+
+
+async def delete_current_rune_page(connection):
+    status, current_page = await LCU_GET(connection, "/lol-perks/v1/currentpage")
+    await LCU_DELETE(connection, "/lol-perks/v1/pages/" + current_page["id"])
+
+
+async def create_new_rune_page(connection):
+    ...
