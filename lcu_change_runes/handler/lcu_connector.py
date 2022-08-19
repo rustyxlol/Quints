@@ -3,9 +3,8 @@ from lcu_driver import Connector
 from lcu_change_runes.handler.lcu_handler_2 import (
     get_summoner_data,
     initialize_variables,
-    update_current_champion,
+    update_current_champion_and_runes,
     update_game_mode,
-    update_rune_page,
 )
 
 connector = Connector()
@@ -27,11 +26,11 @@ async def gameflow_session_listener(connection, event):
     event_types=(
         "CREATE",
         "UPDATE",
+        "DELETE",
     ),
 )
 async def champion_select_champ_listener(connection, event):
-    await update_current_champion(connection, event)
-    await update_rune_page(connection)
+    await update_current_champion_and_runes(connection, event)
 
 
 @connector.close
