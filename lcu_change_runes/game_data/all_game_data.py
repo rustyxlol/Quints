@@ -18,6 +18,16 @@ def get_all_champions():
     return champions
 
 
+def get_rune_paths():
+    runes_data = API_GET(
+        f"https://ddragon.leagueoflegends.com/cdn/{get_latest_version()}/data/en_US/runesReforged.json"
+    )
+    runes = {}
+    for rune in runes_data:
+        runes[rune["id"]] = rune["key"]
+    return runes
+
+
 def get_all_runes():
     runes_data = API_GET(
         "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/perks.json"
@@ -36,15 +46,6 @@ def get_all_runes():
     return runes
 
 
-def get_rune_paths():
-    runes_data = API_GET(
-        f"https://ddragon.leagueoflegends.com/cdn/{get_latest_version()}/data/en_US/runesReforged.json"
-    )
-    runes = {}
-    for rune in runes_data:
-        runes[rune["id"]] = rune["key"]
-    return runes
-
-
 if __name__ == "__main__":
     print(get_all_runes())
+    print(get_all_champions())

@@ -48,12 +48,12 @@ async def update_current_champion_and_runes(connection, event):
 
     if not current_champion:
         return
-
     if connection.locals["champion"] == current_champion:
         return
 
     connection.locals["champion"] = current_champion
     print_game_details(connection)
+
     await update_rune_page(connection)
 
 
@@ -86,6 +86,7 @@ async def create_new_rune_page(connection):
         "subStyleId": runes[1].id,
         "selectedPerkIds": ugg_runes.all_rune_ids()[2:],
     }
+
     await LCU_POST(connection, "/lol-perks/v1/pages", payload)
 
 

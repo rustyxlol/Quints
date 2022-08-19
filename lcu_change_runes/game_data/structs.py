@@ -65,12 +65,3 @@ class Runes:
 
     def all_rune_names(self):
         return [rune.name for rune in self.runes]
-
-
-@attr.s()
-class RunePayLoad:
-    name: str = attr.ib()
-    primary: int = attr.ib()
-    secondary: int = attr.ib()
-    runes: list[int] = attr.ib()
-    current: bool = attr.ib()

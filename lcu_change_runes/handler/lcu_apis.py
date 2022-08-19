@@ -3,7 +3,7 @@ async def LCU_GET(connection, endpoint):
     status_code = request.status
 
     if not request.ok:
-        return status_code, {}
+        return status_code, None
 
     response = await request.json()
     return status_code, response
