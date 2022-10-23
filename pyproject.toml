@@ -5,6 +5,9 @@ description = "automatically change runes"
 authors = ["Rusty <imkhazix@gmail.com>"]
 license = "MIT"
 
+[tool.poetry.scripts]
+rune-changer = "lcu_change_runes.handler.lcu_connector:main"
+
 [tool.poetry.dependencies]
 python = "^3.10"
 requests = "^2.28.1"
