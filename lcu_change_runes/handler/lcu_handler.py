@@ -1,9 +1,8 @@
 from lcu_change_runes.game_data.all_game_data import get_all_champions
 from lcu_change_runes.handler.lcu_apis import LCU_DELETE, LCU_GET, LCU_POST
 from lcu_change_runes.game_data.structs import Champion, Runes
-from lcu_change_runes.parser.ugg import UGGParser
 
-ugg = UGGParser()
+from lcu_change_runes.parser.opgg import generate_runes
 
 
 async def get_summoner_data(connection):
@@ -13,7 +12,6 @@ async def get_summoner_data(connection):
         print_summoner_data(summoner)
     else:
         print("Please run league client first")
-    ugg.generate_runes(Champion(1, "Annie"), "ARAM")
 
 
 async def initialize_variables(connection):
@@ -77,15 +75,18 @@ async def delete_current_rune_page(connection):
 
 
 async def create_new_rune_page(connection):
-    ugg_runes = ugg.generate_runes(
-        connection.locals["champion"], connection.locals["game_mode"]
-    )
-    runes = ugg_runes.runes
+    opgg = generate_runes(connection.locals["champion"], connection.locals["game_mode"])
+    runes = opgg.runes
+
+    selected_runes = opgg.all_rune_ids()
+    del selected_runes[0]
+    del selected_runes[4]
+
     payload = {
         "name": connection.locals["champion"].name + " Runes",
         "primaryStyleId": runes[0].id,
-        "subStyleId": runes[1].id,
-        "selectedPerkIds": ugg_runes.all_rune_ids()[2:],
+        "subStyleId": runes[5].id,
+        "selectedPerkIds": selected_runes,
     }
 
     await LCU_POST(connection, "/lol-perks/v1/pages", payload)

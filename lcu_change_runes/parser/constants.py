@@ -1,5 +1,4 @@
 LEAGUE_VER = "12.20.1"
-CHROME_DRIVER_PATH = r"D:\Programming\LCU\Quints\.venv\chromedriver.exe"
 URL_RUNES_REFORGED = f"https://ddragon.leagueoflegends.com/cdn/{LEAGUE_VER}/data/en_US/runesReforged.json"
 URL_CHAMPIONS = (
     f"http://ddragon.leagueoflegends.com/cdn/{LEAGUE_VER}/data/en_US/champion.json"
