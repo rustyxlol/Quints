@@ -1,5 +1,6 @@
 from lcu_change_runes.game_data.all_game_data import get_all_champions
 from lcu_change_runes.handler.lcu_apis import LCU_DELETE, LCU_GET, LCU_POST
+from lcu_change_runes.game_data.structs import Champion, Runes
 from lcu_change_runes.parser.ugg import UGGParser
 
 ugg = UGGParser()
@@ -8,11 +9,11 @@ ugg = UGGParser()
 async def get_summoner_data(connection):
     print("\nInitiating Connection...\n")
     status, summoner = await LCU_GET(connection, "/lol-summoner/v1/current-summoner")
-
     if status == 200:
         print_summoner_data(summoner)
     else:
         print("Please run league client first")
+    ugg.generate_runes(Champion(1, "Annie"), "ARAM")
 
 
 async def initialize_variables(connection):
