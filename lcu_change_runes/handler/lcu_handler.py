@@ -1,7 +1,5 @@
 from lcu_change_runes.game_data.all_game_data import get_all_champions
 from lcu_change_runes.handler.lcu_apis import LCU_DELETE, LCU_GET, LCU_POST
-from lcu_change_runes.game_data.structs import Champion, Runes
-
 from lcu_change_runes.parser.opgg import generate_runes
 
 
