@@ -39,4 +39,5 @@ async def disconnect(_):
     await connector.stop()
 
 
-connector.start()
+def main():
+    connector.start()
