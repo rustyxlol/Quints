@@ -1,24 +1,22 @@
 <!-- PROJECT LOGO -->
-<br />
-<p align="center">
-  <span style="font-family:Papyrus; font-size:50px;"><img src="https://static.wikia.nocookie.net/leagueoflegends/images/6/65/GreaterQuintessenceofthePiercingPresent.png" width="200" height="200"></span>
-  <h3 align="center">Quints</h3>
 
-  <p align="center">
-    For the once in a month ARAM players
-    <br />
-    <br />
-    <a href="https://github.com/rustyxlol/Quints/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/rustyxlol/Quints/issues">Request Feature</a>
-  </p>
+<p align="center">
+  <img src="https://static.wikia.nocookie.net/leagueoflegends/images/6/65/GreaterQuintessenceofthePiercingPresent.png" width="200" height="200">
+</p>
+<h3 align="center">Quints</h3>
+<p align="center">
+  For the once in a month ARAM players
+  <br />
+  <a href="https://github.com/rustyxlol/Quints/issues">Report Bug</a>
+  ·
+  <a href="https://github.com/rustyxlol/Quints/issues">Request Feature</a>
 </p>
 
 # Quints
 
 A minimalist automation application for League of Legends which fetches runes from [op.gg](https://op.gg) and applies it to your LOCKED IN champion
 
-### Features ⭐
+## Features ⭐
 
 1. Run and gun
 
@@ -33,17 +31,17 @@ cd Quints
 
 2. The easiest way is to install Poetry and run the following:
 
-```
+```bash
 poetry install
 ```
 
 3. Make sure your League client is running and run the following to start the application
 
-```
+```bash
 poetry run rune-changer
 ```
 
-### Resources
+## Resources
 
 1. [LCU API](https://riot-api-libraries.readthedocs.io/en/latest/lcu.html)
 2. [Setting Runes - JS](https://hextechdocs.dev/how-to-set-runes-using-lcu/)
